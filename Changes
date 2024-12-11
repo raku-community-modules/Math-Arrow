@@ -1,4 +1,6 @@
 Revision history for Math::Arrow
 
 {{$NEXT}}
+
+0.1.1  2024-12-11T16:38:02+01:00
     - Initial version as a Raku Community Module
