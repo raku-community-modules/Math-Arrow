@@ -1,19 +1,15 @@
-#
 # Knuth Arrow notation
-
-use v6;
-
-unit module Math::Arrow;
-
-sub infix:<↑>($a, $b) is assoc<right> is export {$a ** $b}
-sub infix:<↑↑>($a, $b) is assoc<right> is export { [↑] $a xx $b }
-sub infix:<↑↑↑>($a, $b) is assoc<right> is export { [↑↑] $a xx $b }
-sub infix:<↑↑↑↑>($a, $b) is assoc<right> is export { [↑↑↑] $a xx $b }
+sub infix:<↑>(    $a, $b) is assoc<right> is export {        $a ** $b }
+sub infix:<↑↑>(   $a, $b) is assoc<right> is export { [↑]    $a xx $b }
+sub infix:<↑↑↑>(  $a, $b) is assoc<right> is export { [↑↑]   $a xx $b }
+sub infix:<↑↑↑↑>( $a, $b) is assoc<right> is export { [↑↑↑]  $a xx $b }
 sub infix:<↑↑↑↑↑>($a, $b) is assoc<right> is export { [↑↑↑↑] $a xx $b }
+
 sub arrow(
-        Cool $a,
-        Cool $b where { $b >= 2 and $b.Int == $b },
-        Cool $arrows where {$arrows.Int == $arrows}) is export {
+  Cool:D $a,
+  Cool:D $b where { $b >= 2 and $b.Int == $b },
+  Cool:D $arrows where {$arrows.Int == $arrows}
+) is export {
 
     die "Negative arrows not allowed" if $arrows < 0;
     return ($a ↑ $b) if $arrows <= 1 or $b <= 1;
@@ -38,27 +34,39 @@ Math::Arrow - Handle Knuth-style arrow notation
 
 In Knuth arrow notation, one arrow is simple exponentiation:
 
-    2 ↑ 3 # gives 8
+=begin code :lang<raku>
+
+2 ↑ 3 # gives 8
+
+=end code
 
 Every additional arrow in the operator implies a layer of
 reduction of the form:
 
-    a ↑{n number of ↑'s} b =
-        a ↑{n-1 ↑'s} ( a ↑{n-1 ↑'s (... a)...)
+=begin code :lang<raku>
+
+a ↑{n number of ↑'s} b =
+  a ↑{n-1 ↑'s} ( a ↑{n-1 ↑'s (... a)...)
+
+=end code
 
 where there are C<b> number of C<a>s in the second form.
 
 But this module only implements up to five arrows (really,
 if you need more than five, I question what the hell
-you think Perl is going to do for you...)
+you think Raku is going to do for you...)
 
 More concretely:
 
-    4 ↑↑↑↑ 3 =
-    4 ↑↑↑ ( 4 ↑↑↑ 4 ) =
-    4 ↑↑↑ ( 4 ↑↑ ( 4 ↑↑ ( 4 ↑↑ 4 ))) =
-    4 ↑↑↑ ( 4 ↑↑ ( 4 ↑↑ ( 4 ↑ (4 ↑ (4 ↑ 4 ))))) =
-    4 ↑↑↑ ( 4 ↑↑ ( 4 ↑↑ ( 4 ** 4 ** 4 ** 4))) = ...
+=begin code :lang<raku>
+
+4 ↑↑↑↑ 3 =
+4 ↑↑↑ ( 4 ↑↑↑ 4 ) =
+4 ↑↑↑ ( 4 ↑↑ ( 4 ↑↑ ( 4 ↑↑ 4 ))) =
+4 ↑↑↑ ( 4 ↑↑ ( 4 ↑↑ ( 4 ↑ (4 ↑ (4 ↑ 4 ))))) =
+4 ↑↑↑ ( 4 ↑↑ ( 4 ↑↑ ( 4 ** 4 ** 4 ** 4))) = ...
+
+=end code
 
 As you can see, this quickly gets out of hand. In fact, there
 are very few arrow-notation expressions which can be
@@ -69,11 +77,15 @@ been around, even on the fastest computers available, today.
 Probably the best-known arrow-notation example is Graham's
 Number (G) which is defined as:
 
-    $g1 = 3 ↑↑↑↑ 3;
-    $g2 = arrow(3, 3, $g1);
-    ...
-    $g64 = arrow(3, 3, $g63);
-    use constant G = $g64;
+=begin code :lang<raku>
+
+$g1 = 3 ↑↑↑↑ 3;
+$g2 = arrow(3, 3, $g1);
+...
+$g64 = arrow(3, 3, $g63);
+use constant G = $g64;
+
+=end code
 
 =head2 operator ↑
 
@@ -105,11 +117,22 @@ Returns the arrow-notation expansion for C<$a ↑[$arrows] $b>
 where C<↑[$arrows]> denotes C<$arrows> many C<↑> in the final
 operator. Thus these two are equivalent:
 
-    arrow(3, 3, 4) == (3 ↑↑↑↑ 3)
+=begin code :lang<raku>
+
+arrow(3, 3, 4) == (3 ↑↑↑↑ 3)
+
+=end code
 
 =head2 term G
 
-(only exported via the :constants tag)
+=begin code :lang<raku>
+
+use Math::Arrow :constants;
+say G;  # you won't have enough CPU or memory to see it
+
+=end code
+
+Only exported via the C<:constants> tag.
 
 The value C<G> is defined as a more-or-less humorous element
 of this module. It can never be used for anything practical,
@@ -119,6 +142,18 @@ computer. But... don't do that.
 
 This value is Graham's number, defined as described above.
 
+=head1 AUTHOR
+
+Aaron Sherman
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2016-2017 Aaron Sherman
+
+Copyright 2024 Raku Community
+
+This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
+
 =end pod
 
-# vim: sw=4 softtabstop=4 ai expandtab filetype=perl6
+# vim: expandtab shiftwidth=4

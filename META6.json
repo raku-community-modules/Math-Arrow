@@ -1,13 +1,24 @@
 {
-    "name"        : "Math::Arrow",
-    "license"     : "Artistic-2.0",
-    "version"     : "0.1.0",
-    "description" : "Knuth arrow notation in Perl 6",
-    "depends"     : [],
-    "perl"        : "6.c",
-    "provides" : {
-        "Math::Arrow" : "lib/Math/Arrow.pm"
-    },
-    "source-type"   : "git",
-    "source-url"    : "git://github.com/ajs/perl6-Math-Arrow"
+  "auth": "zef:raku-community-modules",
+  "author": "Aaron Sherman",
+  "build-depends": [
+  ],
+  "depends": [
+  ],
+  "description": "Handle Knuth-style arrow notation",
+  "license": "Artistic-2.0",
+  "name": "Math::Arrow",
+  "perl": "6.c",
+  "provides": {
+    "Math::Arrow": "lib/Math/Arrow.rakumod"
+  },
+  "resources": [
+  ],
+  "source-type": "git",
+  "source-url": "https://github.com/raku-community-modules/Math-Arrow.git",
+  "tags": [
+  ],
+  "test-depends": [
+  ],
+  "version": "0.1.0"
 }
